@@ -18,45 +18,48 @@ export class GildedRose {
     item.sellIn--
     const sellInPassed = item.sellIn < 0
 
-    if (item.name === SpecialItemName.Conjured) {
-      const conjuredDecresedNum = sellInPassed
-        ? NormalItemQualityChangePerDay * 2 * 2
-        : NormalItemQualityChangePerDay * 2
-
-      updateSingleItemQuality(item, conjuredDecresedNum * -1)
-
-      return item
-    }
-
-    if (item.name === SpecialItemName.AgedBrie) {
-      const agedIncreasedNum = sellInPassed
-        ? NormalItemQualityChangePerDay * 2
-        : NormalItemQualityChangePerDay
-      updateSingleItemQuality(item, agedIncreasedNum)
-      return item
-    }
-
-    if (item.name === SpecialItemName.BackstagePasses) {
-      if (sellInPassed) {
-        item.quality = 0
-      } else {
-        const passesIncreasedNum = item.sellIn < 5 ? 3
-          : item.sellIn < 10 ? 2
-            : NormalItemQualityChangePerDay
-        updateSingleItemQuality(item, passesIncreasedNum)
+    switch (item.name) {
+      case SpecialItemName.Sulfuras: {
+        return item
       }
+      case SpecialItemName.Conjured: {
+        const conjuredDecresedNum = sellInPassed
+          ? NormalItemQualityChangePerDay * 2 * 2
+          : NormalItemQualityChangePerDay * 2
 
-      return item
+        updateSingleItemQuality(item, conjuredDecresedNum * -1)
+
+        return item
+      }
+      case SpecialItemName.AgedBrie: {
+        const agedIncreasedNum = sellInPassed
+          ? NormalItemQualityChangePerDay * 2
+          : NormalItemQualityChangePerDay
+        updateSingleItemQuality(item, agedIncreasedNum)
+        return item
+      }
+      case SpecialItemName.BackstagePasses: {
+        if (sellInPassed) {
+          item.quality = 0
+        } else {
+          const passesIncreasedNum = item.sellIn < 5 ? 3
+            : item.sellIn < 10 ? 2
+              : NormalItemQualityChangePerDay
+          updateSingleItemQuality(item, passesIncreasedNum)
+        }
+
+        return item
+      }
+      default: {
+        updateSingleItemQuality(
+          item,
+          sellInPassed
+            ? (NormalItemQualityChangePerDay * 2 * -1)
+            : (NormalItemQualityChangePerDay * -1))
+
+        return item
+      }
     }
-
-    updateSingleItemQuality(
-      item,
-      sellInPassed
-        ? (NormalItemQualityChangePerDay * 2 * -1)
-        : (NormalItemQualityChangePerDay * -1))
-
-    return item
-
   }
 
   updateQuality() {
