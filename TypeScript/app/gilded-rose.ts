@@ -1,3 +1,4 @@
+import { NormalItemQualityChangePerDay, SpecialItemName } from "./consts";
 import { Item } from "./item";
 
 export class GildedRose {
@@ -9,38 +10,42 @@ export class GildedRose {
 
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
+      if (this.items[i].name !== SpecialItemName.AgedBrie && this.items[i].name !== SpecialItemName.BackstagePasses) {
         if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
+          if (this.items[i].name === SpecialItemName.Conjured) {
+            const newQuality = this.items[i].quality - (NormalItemQualityChangePerDay * 2)
+            this.items[i].quality = newQuality < 0 ? 0 : newQuality
+          } else if (this.items[i].name !== SpecialItemName.Sulfuras) {
+
+            this.items[i].quality = this.items[i].quality - NormalItemQualityChangePerDay
           }
         }
       } else {
         if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
+          this.items[i].quality = this.items[i].quality + NormalItemQualityChangePerDay
+          if (this.items[i].name === SpecialItemName.BackstagePasses) {
             if (this.items[i].sellIn < 11) {
               if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
+                this.items[i].quality = this.items[i].quality + NormalItemQualityChangePerDay
               }
             }
             if (this.items[i].sellIn < 6) {
               if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
+                this.items[i].quality = this.items[i].quality + NormalItemQualityChangePerDay
               }
             }
           }
         }
       }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
+      if (this.items[i].name !== SpecialItemName.Sulfuras) {
+        this.items[i].sellIn = this.items[i].sellIn - NormalItemQualityChangePerDay
       }
       if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
+        if (this.items[i].name !== SpecialItemName.AgedBrie) {
+          if (this.items[i].name !== SpecialItemName.BackstagePasses) {
             if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
+              if (this.items[i].name !== SpecialItemName.Sulfuras) {
+                this.items[i].quality = this.items[i].quality - NormalItemQualityChangePerDay
               }
             }
           } else {
@@ -48,7 +53,7 @@ export class GildedRose {
           }
         } else {
           if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
+            this.items[i].quality = this.items[i].quality + NormalItemQualityChangePerDay
           }
         }
       }
