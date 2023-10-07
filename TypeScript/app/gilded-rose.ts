@@ -15,8 +15,8 @@ export class GildedRose {
       return item
     }
 
-    const sellInPassed = item.sellIn <= 0
     item.sellIn--
+    const sellInPassed = item.sellIn < 0
 
     if (item.name === SpecialItemName.Conjured) {
       const conjuredDecresedNum = sellInPassed
